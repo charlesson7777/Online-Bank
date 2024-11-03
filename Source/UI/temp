@@ -1,0 +1,128 @@
+//This class creates a simple GUI registration form using Swing components. It includes fields for personal details such as name, email, address, city, state, username, and password.
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class RegistrationForm extends JFrame implements ActionListener {
+    JRadioButton r1, r2;
+    JButton submitButton, cancelButton;
+    JTextField textName, textEmail, textAdd, textCity, textState, textUsername;
+    JPasswordField textPassword;
+
+    RegistrationForm() {
+        super("Registration FORM");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(850, 950); 
+        setLayout(null);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new Color(255, 239, 219));
+        setVisible(true); 
+
+        addComponent(new JLabel("APPLICATION FORM"), new Font("Raleway", Font.BOLD, 38), 160, 20, 600, 40);
+        addComponent(new JLabel("Personal Details"), new Font("Raleway", Font.BOLD, 22), 290, 90, 600, 30);
+
+        textName = addTextField("Name:", 190);
+        textEmail = addTextField("Email address:", 240);
+        textAdd = addTextField("Address:", 290);
+        textCity = addTextField("City:", 340);
+        textState = addTextField("State:", 390);
+        textUsername = addTextField("Username:", 440);
+        textPassword = addPasswordField("Password:", 490);
+
+        r1 = new JRadioButton("Male");
+        r2 = new JRadioButton("Female");
+        r1.setBounds(300, 290, 60, 30);
+        r2.setBounds(450, 290, 90, 30);
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(r1);
+        bg.add(r2);
+        add(r1);
+        add(r2);
+
+        submitButton = new JButton("Submit");
+        submitButton.setFont(new Font("Raleway", Font.BOLD, 14));
+        submitButton.setBounds(300, 540, 200, 50);
+        submitButton.addActionListener(this);
+        add(submitButton);
+
+        cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Raleway", Font.BOLD, 14));
+        cancelButton.setBounds(510, 540, 200, 50);
+        cancelButton.addActionListener(this);
+        add(cancelButton);
+        
+
+        // setVisible(true); 
+    }
+
+    private JTextField addTextField(String label, int yPos) {
+        JLabel jLabel = new JLabel(label);
+        jLabel.setFont(new Font("Raleway", Font.BOLD, 20));
+        jLabel.setBounds(100, yPos, 200, 30);
+        add(jLabel);
+
+        JTextField textField = new JTextField();
+        textField.setFont(new Font("Raleway", Font.BOLD, 14));
+        textField.setBounds(300, yPos, 400, 30);
+        add(textField);
+        return textField;
+    }
+
+    private void addComponent(JLabel label, Font font, int x, int y, int width, int height) {
+        label.setFont(font);
+        label.setBounds(x, y, width, height);
+        add(label);
+    }
+
+    private JPasswordField addPasswordField(String label, int yPos) {
+        JLabel jLabel = new JLabel(label);
+        jLabel.setFont(new Font("Raleway", Font.BOLD, 20));
+        jLabel.setBounds(100, yPos, 200, 30);
+        add(jLabel);
+
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setFont(new Font("Raleway", Font.BOLD, 14));
+        passwordField.setBounds(300, yPos, 400, 30);
+        passwordField.setEchoChar('*');
+        add(passwordField);
+        return passwordField;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitButton) {
+            if (validateInputs()) {
+                saveCredentials(textUsername.getText(), new String(textPassword.getPassword()));
+                JOptionPane.showMessageDialog(this, "Registration Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (e.getSource() == cancelButton) {
+            dispose();  
+        }
+    }
+
+    private boolean validateInputs() {
+        if (textName.getText().trim().isEmpty() || textEmail.getText().trim().isEmpty() ||
+            textAdd.getText().trim().isEmpty() || textCity.getText().trim().isEmpty() ||
+            textState.getText().trim().isEmpty() || textUsername.getText().trim().isEmpty() ||
+            new String(textPassword.getPassword()).trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveCredentials(String username, String password) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("credentials.txt", true))) {
+            writer.write(username + "," + password);
+            writer.newLine();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Failed to save credentials", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
