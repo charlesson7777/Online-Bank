@@ -4,8 +4,8 @@ Required sections: Header, Files, Notes, How to compile and run, I/O Example
 # CS611-Online Bank Final project
 ## Name of Assignment
 ---------------------------------------------------------------------------
-Name: Beaudlaire Jeancharles, Kathlyn Sinaga, Heyang You
-Email: bmalik@bu.edu, kathlyn@bu.edu, jhyyu@bu.edu
+Name: Beaudlaire Jeancharles
+Email: bmalik@bu.edu, 
 Student ID: U70445938
 
 ## Files
